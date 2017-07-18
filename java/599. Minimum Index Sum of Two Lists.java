@@ -1,6 +1,6 @@
 // O(m + n) time, O(n) space
 public class Solution {
-    public String[] findRestaurant(String[] list1, String[] list2) {
+    public String[] findRestaurant(String[] list1, String[] slist2) {
         List<String> result = new ArrayList<>();
         int leastIndexSum = Integer.MAX_VALUE;
         Map<String, Integer> hmap = new HashMap<>();
