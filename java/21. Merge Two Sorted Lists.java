@@ -6,25 +6,31 @@
  *     ListNode(int x) { val = x; }
  * }
  */
-
-// O(n)
-public class Solution {
+// O(m + n)
+class Solution {
     public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if (l1 == null) {
+            return l2;
+        } else if (l2 == null) {
+            return l1;
+        }
         ListNode head, cur;
-        head = cur = null;
+        if (l1.val <= l2.val) {
+            head = cur = l1;
+            l1 = l1.next;
+        } else {
+            head = cur = l2;
+            l2 = l2.next;
+        }
         while (l1 != null || l2 != null) {
-            ListNode nxt = l1;
-            if (l1 == null || (l2 != null && l1.val > l2.val)) {
-                nxt = l2;
-                l2 = l2.next;
-            } else {
+            if (l2 == null || (l1 != null && l1.val <= l2.val)) {
+                cur.next = l1;
                 l1 = l1.next;
-            }
-            if (head == null) {
-                head = cur = nxt;
+                cur = cur.next;
             } else {
-                cur.next = nxt;
-                cur = nxt;
+                cur.next = l2;
+                l2 = l2.next;
+                cur = cur.next;
             }
         }
         return head;

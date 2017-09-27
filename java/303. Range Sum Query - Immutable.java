@@ -1,15 +1,15 @@
-// O(n)
+// O(1) sumRange
 class NumArray {
-    int[] n;
+    int[] accum;
     public NumArray(int[] nums) {
-        n = new int[nums.length + 1];
-        for (int i = 0; i < nums.length; ++i) {
-            n[i + 1] = n[i] + nums[i];
+        accum = new int[nums.length + 1];
+        for (int i = 1; i < accum.length; ++i) {
+            accum[i] = accum[i - 1] + nums[i - 1];
         }
     }
 
     public int sumRange(int i, int j) {
-        return n[j + 1] - n[i];
+        return accum[j + 1] - accum[i];
     }
 }
 

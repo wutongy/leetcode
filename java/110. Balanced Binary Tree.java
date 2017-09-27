@@ -7,24 +7,20 @@
  *     TreeNode(int x) { val = x; }
  * }
  */
-
 // O(n)
-public class Solution {
-    private boolean flag = true;
+class Solution {
     public boolean isBalanced(TreeNode root) {
-        treeHeight(root);
-        return flag;
+        return helper(root) != -1;
     }
 
-    private int treeHeight(TreeNode root) {
-        if (root == null || flag == false) {
+    private int helper(TreeNode root) {
+        if (root == null) {
             return 0;
         }
-        int leftHeight = treeHeight(root.left);
-        int rightHeight = treeHeight(root.right);
-        if (Math.abs(leftHeight - rightHeight) > 1) {
-            flag = false;
-            return 0;
+        int leftHeight = helper(root.left);
+        int rightHeight = helper(root.right);
+        if (leftHeight == -1 || rightHeight == -1 || Math.abs(leftHeight - rightHeight) > 1) {
+            return -1;
         }
         return Math.max(leftHeight, rightHeight) + 1;
     }

@@ -1,18 +1,22 @@
-public class Solution {
+// O(n)
+class Solution {
     public int[] intersection(int[] nums1, int[] nums2) {
-        List<Integer> result = new ArrayList<>();
-        Set<Integer> hset = new HashSet<>();
-        for (int num1 : nums1) {
-            hset.add(num1);
+        HashSet<Integer> set = new HashSet<>();
+        for (int n1 : nums1) {
+            set.add(n1);
         }
-        for (int num2 : nums2) {
-            if (hset.contains(num2)) {
-                result.add(num2);
-                hset.remove(num2);
+        List<Integer> res = new ArrayList<>();
+        for (int n2 : nums2) {
+            if (set.contains(n2)) {
+                res.add(n2);
+                set.remove(n2);
             }
         }
-        int[] arr = new int[result.size()];
-        for (int i= 0; i < result.size(); i++) arr[i] = result.get(i);
-        return arr;
+        int[] result = new int[res.size()];
+        int i = 0;
+        for (Integer num : res) {
+            result[i++] = num;
+        }
+        return result;
     }
 }

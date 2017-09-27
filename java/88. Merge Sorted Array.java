@@ -1,17 +1,16 @@
-// O(n)
-class solution {
+// O(m + n)
+class Solution {
     public void merge(int[] nums1, int m, int[] nums2, int n) {
-        int last = m + n - 1;
+        int pos = m + n - 1;
         while (m >= 1 || n >= 1) {
-            int mNum = m >= 1 ? nums1[m - 1] : Integer.MIN_VALUE;
-            int nNum = n >= 1 ? nums2[n - 1] : Integer.MIN_VALUE;
-            if (mNum >= nNum) {
-                nums1[last--] = mNum;
+            if (n < 1 || (m >= 1 && nums1[m - 1] >= nums2[n - 1])) {
+                nums1[pos] = nums1[m - 1];
                 --m;
             } else {
-                nums1[last--] = nNum;
+                nums1[pos] = nums2[n - 1];
                 --n;
             }
+            --pos;
         }
     }
 }

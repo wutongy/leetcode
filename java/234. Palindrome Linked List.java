@@ -12,31 +12,27 @@ class Solution {
         if (head == null || head.next == null) {
             return true;
         }
-        ListNode cur = head;
-        int count = 0;
-        while (cur != null) {
-            ++count;
-            cur = cur.next;
-        }
-        cur = head;
-        ListNode prev = null, next = head.next, fast = head.next;
-        while (fast.next != null && fast.next.next != null) {
-            cur.next = prev;
-            prev = cur;
-            cur = next;
-            next = next.next;
+        ListNode slow = head, fast = head.next, prev = null;
+        while (fast != null && fast.next != null) {
+            ListNode next = slow.next;
+            slow.next = prev;
+            prev = slow;
+            slow = next;
             fast = fast.next.next;
         }
-        cur.next = prev;
-        if (count % 2 != 0) {
-            next = next.next;
+        if (fast == null) {
+            fast = slow.next;
+            slow = prev;
+        } else {
+            fast = slow.next;
+            slow.next = prev;
         }
-        while (cur != null) {
-            if (cur.val != next.val) {
+        while (slow != null && fast != null) {
+            if (slow.val != fast.val) {
                 return false;
             }
-            cur = cur.next;
-            next = next.next;
+            slow = slow.next;
+            fast = fast.next;
         }
         return true;
     }

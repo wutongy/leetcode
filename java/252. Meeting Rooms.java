@@ -8,14 +8,17 @@
  * }
  */
 // O(nlogn)
-public class Solution {
+class Solution {
     public boolean canAttendMeetings(Interval[] intervals) {
         Arrays.sort(intervals, new Comparator<Interval>() {
             public int compare(Interval a, Interval b) {
+                if (a.start == b.start) {
+                    return a.end - b.end;
+                }
                 return a.start - b.start;
             }
         });
-        for (int i = 1; i < intervals.length; i++) {
+        for (int i = 1; i < intervals.length; ++i) {
             if (intervals[i].start < intervals[i - 1].end) {
                 return false;
             }

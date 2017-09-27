@@ -1,17 +1,12 @@
 // O(n)
-public class Solution {
+class Solution {
     public int climbStairs(int n) {
-        if (n < 3) {
-            return n;
+        int l1 = 1, l2 = 1;
+        for (int i = 2; i <= n; ++i) {
+            int temp = l2 + l1;
+            l1 = l2;
+            l2 = temp;
         }
-        int n1 = 1;
-        int n2 = 2;
-        int result = 0;
-        for (int i = 2; i < n; i++) {
-            result = n1 + n2;
-            n1 = n2;
-            n2 = result;
-        }
-        return result;
+        return l2;
     }
 }

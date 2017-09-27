@@ -8,36 +8,25 @@
  * }
  */
 // O(n)
-public class Solution {
-    private ArrayList<String> res = new ArrayList<>();
-    private StringBuilder sb = new StringBuilder();
+class Solution {
     public List<String> binaryTreePaths(TreeNode root) {
-        if (root == null) {
-            return res;
-        }
-        sb.append(root.val);
-        if (root.left == null && root.right == null) {
-            res.add(sb.toString());
-        } else {
-            helper(root.left);
-            helper(root.right);
+        List<String> res = new ArrayList<>();
+        if (root != null) {
+            dfs(root, "", res);
         }
         return res;
     }
 
-    private void helper(TreeNode cur) {
-        if (cur == null) {
+    private void dfs(TreeNode root, String path, List<String> res) {
+        if (root.left == null && root.right == null) {
+            res.add(path + root.val);
             return;
         }
-        sb.append("->");
-        sb.append(cur.val);
-        if (cur.left == null && cur.right == null) {
-            res.add(sb.toString());
-        } else {
-            helper(cur.left);
-            helper(cur.right);
+        if (root.left != null) {
+            dfs(root.left, path + root.val + "->", res);
         }
-        int ln = sb.length();
-        sb.delete(ln - 2 - String.valueOf(cur.val).length(), ln);
+        if (root.right != null) {
+            dfs(root.right, path + root.val + "->", res);
+        }
     }
 }

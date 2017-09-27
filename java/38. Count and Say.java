@@ -1,24 +1,23 @@
-// O(n)
-public class Solution {
+//
+class Solution {
     public String countAndSay(int n) {
-        StringBuilder prev = new StringBuilder("1");
-        StringBuilder result = prev;
-        for (int i = 1; i < n; i++) {
-            result = new StringBuilder();
+        StringBuilder cur = new StringBuilder();
+        StringBuilder next;
+        cur.append("1");
+        for (int i = 1; i < n; ++i) {
+            next = new StringBuilder();
             int j = 0;
-            while (j < prev.length()) {
-                char c = prev.charAt(j);
-                int count = 1;
-                ++j;
-                while (j < prev.length() && prev.charAt(j) == c) {
-                    ++j;
-                    ++count;
+            while (j < cur.length()) {
+                int k = j + 1;
+                while (k < cur.length() && cur.charAt(k) == cur.charAt(k - 1)) {
+                    ++k;
                 }
-                result.append(count);
-                result.append(c);
+                next.append(k - j);
+                next.append(cur.charAt(j));
+                j = k;
             }
-            prev = result;
+            cur = next;
         }
-        return result.toString();
+        return cur.toString();
     }
 }
