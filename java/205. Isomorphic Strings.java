@@ -1,34 +1,43 @@
-// O(n)
+// HashMap O(n)
 class Solution {
     public boolean isIsomorphic(String s, String t) {
-        HashMap<Character, Character> hmap = new HashMap<>();
-        HashSet<Character> hset = new HashSet<>();
-        for (int i = 0; i < t.length(); i++) {
-            if (hmap.containsKey(t.charAt(i))) {
-                if (hmap.get(t.charAt(i)) != s.charAt(i)) {
+        if (s.length() != t.length()) {
+            return false;
+        }
+        HashMap<Character, Character> map = new HashMap<>();
+        HashSet<Character> used = new HashSet<>();
+        int i = 0, j = 0;
+        while (i < s.length() && j < t.length()) {
+            if (map.containsKey(s.charAt(i))) {
+                if (map.get(s.charAt(i)) != t.charAt(j)) {
                     return false;
                 }
+            } else if (used.contains(t.charAt(j))) {
+                return false;
             } else {
-                if (hset.contains(s.charAt(i))) {
-                    return false;
-                }
-                hmap.put(t.charAt(i), s.charAt(i));
-                hset.add(s.charAt(i));
+                map.put(s.charAt(i), t.charAt(j));
+                used.add(t.charAt(j));
             }
+            ++i;
+            ++j;
         }
         return true;
     }
 }
 
-// O(n)
+//
 class Solution {
     public boolean isIsomorphic(String s, String t) {
-        int[] m = new int[512];
-        for (int i = 0; i < s.length(); i++) {
-            if (m[s.charAt(i)] != m[t.charAt(i) + 256]) {
+        if (s.length() != t.length()) {
+            return false;
+        }
+        int[] m1 = new int[256], m2 = new int[256];
+        for (int i = 0; i < s.length(); ++i) {
+            if (m1[s.charAt(i)] != m2[t.charAt(i)]) {
                 return false;
             }
-            m[s.charAt(i)] = m[t.charAt(i) + 256] = i + 1;
+            m1[s.charAt(i)] = i + 1;
+            m2[t.charAt(i)] = i + 1;
         }
         return true;
     }

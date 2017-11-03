@@ -1,38 +1,27 @@
-// O((logN)^2)
+// O(logn)
 class Solution {
     public int divide(int dividend, int divisor) {
         int sign = 1;
-        if ((dividend > 0) ^ (divisor > 0)) {
+        if ((dividend < 0) ^ (divisor < 0)) {
             sign = -1;
         }
-        long ldividend = Math.abs((long) dividend);
-        long ldivisor = Math.abs((long) divisor);
-        if (ldivisor == 0) {
-            return Integer.MAX_VALUE;
+        long num = Math.abs((long) dividend);
+        long den = Math.abs((long) divisor);
+        int times = 1;
+        long res = 0;
+        while ((den << 1) < num) {
+            times <<= 1;
+            den <<= 1;
         }
-        if (ldividend == 0 || ldividend < ldivisor) {
-            return 0;
+        while (times > 0) {
+            while (num >= den) {
+                res += times;
+                num -= den;
+            }
+            den >>>= 1;
+            times >>>= 1;
         }
-        long lans = ldivide(ldividend, ldivisor);
-        int ans = 0;
-        if (lans > Integer.MAX_VALUE) {
-            ans = (sign == 1) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
-        } else {
-            ans = (int) (sign * lans);
-        }
-        return ans;
-    }
-
-    private long ldivide(long ldividend, long ldivisor) {
-        if (ldividend < ldivisor) {
-            return 0;
-        }
-        long sum = ldivisor;
-        long multiple = 1;
-        while ((sum + sum) <= ldividend) {
-            sum += sum;
-            multiple += multiple;
-        }
-        return multiple + ldivide(ldividend - sum, ldivisor);
+        res *= sign;
+        return res > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int)res;
     }
 }

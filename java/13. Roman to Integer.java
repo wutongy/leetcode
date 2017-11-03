@@ -1,25 +1,17 @@
 // O(n)
 class Solution {
     public int romanToInt(String s) {
-        if (s == null || s.length() == 0) {
-            return -1;
-        }
-        HashMap<Character, Integer> map = new HashMap<>();
-        map.put('I', 1);
-        map.put('V', 5);
-        map.put('X', 10);
-        map.put('L', 50);
-        map.put('C', 100);
-        map.put('D', 500);
-        map.put('M', 1000);
-        int len = s.length(), result = map.get(s.charAt(len - 1));
-        for (int i = len - 2; i >= 0; --i) {
-            if (map.get(s.charAt(i)) >= map.get(s.charAt(i + 1))) {
-                result += map.get(s.charAt(i));
+        String[] symbols = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+        int[] vals = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+        int i = 0, j = 0, res = 0;
+        while (j < s.length()) {
+            if (j + symbols[i].length() <= s.length() && s.substring(j, j + symbols[i].length()).equals(symbols[i])) {
+                res += vals[i];
+                j += symbols[i].length();
             } else {
-                result -= map.get(s.charAt(i));
+                ++i;
             }
         }
-        return result;
+        return res;
     }
 }

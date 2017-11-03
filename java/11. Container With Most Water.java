@@ -1,23 +1,21 @@
 // O(n)
 class Solution {
     public int maxArea(int[] height) {
-        int i = 0, j = height.length - 1;
-        int maxVal = 0;
-        while (i < j) {
-            maxVal = Math.max(maxVal,Math.min(height[i], height[j]) * (j - i));
-            int oldH;
+        int i = 0, j = height.length - 1, res = Math.min(height[i], height[j]) * (j - i);
+        while (i < j - 1) {
             if (height[i] <= height[j]) {
-                oldH = height[i];
-                while (i < j && height[i] <= oldH) {
+                ++i;
+                while (i < j - 1 && height[i] <= height[i - 1]) {
                     ++i;
                 }
             } else {
-                oldH = height[j];
-                while (i < j && height[j] <= oldH) {
+                --j;
+                while (i < j - 1 && height[j] <= height[j + 1]) {
                     --j;
                 }
             }
+            res = Math.max(res, Math.min(height[i], height[j]) * (j - i));
         }
-        return maxVal;
+        return res;
     }
 }

@@ -1,31 +1,75 @@
-// O(log(min(n, m)))
+// O(log(min(m, n)))
 class Solution {
-    public double findMedianSortedArrays(int[] A, int[] B) {
-        int m = A.length;
-        int n = B.length;
-        if (m > n) {
-            return findMedianSortedArrays(B, A);
+    private int findKth(int[] nums1, int idx1, int[] nums2, int idx2, int remain) {
+        if (idx1 >= nums1.length) {
+            return nums2[idx2 + remain - 1];
+        } else if (idx2 >= nums2.length) {
+            return nums1[idx1 + remain - 1];
         }
-        int imin = 0, imax = m;
+        if (remain == 1) {
+            return Math.min(nums1[idx1], nums2[idx2]);
+        }
+        int mid1 = Integer.MAX_VALUE, mid2 = Integer.MAX_VALUE;
+        if (idx1 + remain / 2 - 1 < nums1.length) {
+            mid1 = nums1[idx1 + remain / 2 - 1];
+        }
+        if (idx2 + remain / 2 - 1 < nums2.length) {
+            mid2 = nums2[idx2 + remain / 2 - 1];
+        }
+        if (mid1 < mid2) {
+            return findKth(nums1, idx1 + remain / 2, nums2, idx2, remain - remain / 2);
+        } else {
+            return findKth(nums1, idx1, nums2, idx2 + remain / 2, remain - remain / 2);
+        }
+    }
+
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        if ((nums1.length + nums2.length) % 2 == 1) {
+            return findKth(nums1, 0, nums2, 0, (nums1.length + nums2.length + 1) / 2);
+        } else {
+            return (findKth(nums1, 0, nums2, 0, (nums1.length + nums2.length + 1) / 2) + findKth(nums1, 0, nums2, 0, (nums1.length + nums2.length + 2) / 2)) / 2.0;
+        }
+    }
+}
+
+// O(log(min(m, n)))
+class Solution {
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int m = nums1.length, n = nums2.length;
+        if (m > n) {
+            return findMedianSortedArrays(nums2, nums1);
+        }
+        if (n == 0) {
+            throw new IllegalArgumentException("nums can not be empty");
+        }
+        int imin = 0, imax = m, halfLen = (m + n + 1) / 2;
         while (imin <= imax) {
             int i = imin + (imax - imin) / 2;
-            int j = (m + n + 1) / 2 - i;
-            int A_left = i == 0 ? Integer.MIN_VALUE : A[i - 1];
-            int A_right = i == m ? Integer.MAX_VALUE : A[i];
-            int B_left = j == 0 ? Integer.MIN_VALUE : B[j - 1];
-            int B_right = j == n ? Integer.MAX_VALUE : B[j];
-            if (A_left > B_right) {
-                imax = i - 1;
-            } else if (B_left > A_right) {
+            int j = halfLen - i;
+            if (i < m && nums2[j - 1] > nums1[i]) {
                 imin = i + 1;
+            } else if (i > 0 && nums1[i - 1] > nums2[j]) {
+                imax = i - 1;
             } else {
-                int max_left = A_left > B_left ? A_left : B_left;
-                int min_right= A_right > B_right ? B_right : A_right;
-                if ((m + n) % 2 == 1) {
-                    return max_left;
+                int maxLeft = 0, minRight = 0;
+                if (i == 0) {
+                    maxLeft = nums2[j - 1];
+                } else if (j == 0) {
+                    maxLeft = nums1[i - 1];
                 } else {
-                    return (max_left + min_right) / 2.0;
+                    maxLeft = Math.max(nums1[i - 1], nums2[j - 1]);
                 }
+                if ((m + n) % 2 == 1) {
+                    return maxLeft;
+                }
+                if (i == m) {
+                    minRight = nums2[j];
+                } else if (j == n) {
+                    minRight = nums1[i];
+                } else {
+                    minRight = Math.min(nums1[i], nums2[j]);
+                }
+                return (maxLeft + minRight) / 2.0;
             }
         }
         return -1;

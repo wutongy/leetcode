@@ -1,28 +1,27 @@
-// O(m + n) time, O(1) space
+// O(n * size(n))
 public class ZigzagIterator {
-    LinkedList<Iterator<Integer>> list;
-
+    Queue<Iterator<Integer>> queue;
     public ZigzagIterator(List<Integer> v1, List<Integer> v2) {
-        list = new LinkedList<Iterator<Integer>>();
-        if (!v1.isEmpty()) {
-            list.add(v1.iterator());
+        queue = new LinkedList<>();
+        if (v1.size() > 0) {
+            queue.offer(v1.iterator());
         }
-        if (!v2.isEmpty()) {
-            list.add(v2.iterator());
+        if (v2.size() > 0) {
+            queue.offer(v2.iterator());
         }
     }
 
     public int next() {
-        Iterator<Integer> poll = list.remove();
-        int result = poll.next();
-        if (poll.hasNext()) {
-            list.add(poll);
+        Iterator<Integer> iter = queue.poll();
+        int res = iter.next();
+        if (iter.hasNext()) {
+            queue.offer(iter);
         }
-        return result;
+        return res;
     }
 
     public boolean hasNext() {
-        return !list.isEmpty();
+        return !queue.isEmpty();
     }
 }
 

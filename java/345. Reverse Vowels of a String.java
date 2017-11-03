@@ -1,35 +1,24 @@
 // O(n)
-public class Solution {
+class Solution {
     public String reverseVowels(String s) {
-        int left = 0, right = s.length() - 1;
-        StringBuilder sbLeft = new StringBuilder();
-        StringBuilder sbRight = new StringBuilder();
-        while (left < right) {
-            while (left < right && (!isVowel(s.charAt(left)))) {
-                sbLeft.append(s.charAt(left));
-                ++left;
+        String vowels = "aeiouAEIOU";
+        char[] cs = s.toCharArray();
+        int i = 0, j = cs.length - 1;
+        while (i < j) {
+            while (i < j && vowels.indexOf(cs[i]) == -1) {
+                ++i;
             }
-            while (left < right && (!isVowel(s.charAt(right)))) {
-                sbRight.append(s.charAt(right));
-                --right;
+            while (i < j && vowels.indexOf(cs[j]) == -1) {
+                --j;
             }
-            if (left < right) {
-                sbLeft.append(s.charAt(right));
-                sbRight.append(s.charAt(left));
-                ++left;
-                --right;
+            if (i < j) {
+                char temp = cs[i];
+                cs[i] = cs[j];
+                cs[j] = temp;
+                ++i;
+                --j;
             }
         }
-        if (left == right) {
-            sbLeft.append(s.charAt(left));
-        }
-        return sbLeft.append(sbRight.reverse()).toString();
-    }
-
-    private boolean isVowel(Character c) {
-        if (c == 'a' || c == 'e'|| c == 'i' || c == 'o' || c == 'u' || c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U') {
-            return true;
-        }
-        return false;
+        return new String(cs);
     }
 }

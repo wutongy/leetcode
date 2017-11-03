@@ -1,12 +1,19 @@
 // O(n)
 class Solution {
     public int trap(int[] height) {
-        int l = 0, r = height.length - 1, level = 0, water = 0;
-        while (l < r) {
-            int lower = height[height[l] < height[r] ? l++ : r--];
-            level = Math.max(level, lower);
-            water += level - lower;
+        int i = 0, j = height.length - 1;
+        int leftMax = 0, rightMax = 0, max = 0;
+        while (i <= j) {
+            leftMax = Math.max(leftMax, height[i]);
+            rightMax = Math.max(rightMax, height[j]);
+            if (leftMax < rightMax) {
+                max += (leftMax - height[i]);
+                ++i;
+            } else {
+                max += (rightMax - height[j]);
+                --j;
+            }
         }
-        return water;
+        return max;
     }
 }

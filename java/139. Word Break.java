@@ -15,3 +15,29 @@ class Solution {
         return f[s.length()];
     }
 }
+
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        HashMap<Integer, Boolean> map = new HashMap<>();
+        HashSet<String> words = new HashSet<>(wordDict);
+        return backtrack(s, 0, words, map);
+    }
+
+    private boolean backtrack(String s, int start, HashSet<String> words, HashMap<Integer, Boolean> map) {
+        if (map.containsKey(start)) {
+            return false;
+        }
+        if (start == s.length()) {
+            return true;
+        }
+        for (int i = s.length(); i >= start + 1; --i) {
+            if (words.contains(s.substring(start, i))) {
+                if (backtrack(s, i, words, map)) {
+                    return true;
+                }
+            }
+        }
+        map.put(start, false);
+        return false;
+    }
+}

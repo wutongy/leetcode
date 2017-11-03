@@ -1,23 +1,29 @@
-public class MovingAverage {
+// O(n)
+class MovingAverage {
 
     /** Initialize your data structure here. */
-    LinkedList<Integer> ll;
-    int sum;
-    int len;
+    Deque<Integer> dq;
+    int sum, cap;
     public MovingAverage(int size) {
-        ll = new LinkedList<>();
         sum = 0;
-        len = size;
+        cap = size;
+        dq = new ArrayDeque<>();
     }
 
     public double next(int val) {
-        ll.addLast(val);
         sum += val;
-        if (ll.size() > len) {
-            int firstElem = ll.removeFirst();
-            sum -= firstElem;
-            return sum * 1.0 / len;
+        dq.offer(val);
+        if (cap == 0) {
+            sum -= dq.poll();
+        } else {
+            --cap;
         }
-        return sum * 1.0 / ll.size();
+        return sum * 1.0 / dq.size();
     }
 }
+
+/**
+ * Your MovingAverage object will be instantiated and called as such:
+ * MovingAverage obj = new MovingAverage(size);
+ * double param_1 = obj.next(val);
+ */

@@ -1,39 +1,32 @@
 // O(n^2)
 class Solution {
     public int maximalRectangle(char[][] matrix) {
-        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+        if (matrix == null || matrix.length == 0 || matrix[0] == null || matrix[0].length == 0) {
             return 0;
         }
-        int cLen = matrix[0].length;
-        int rLen = matrix.length;
-        int[] h = new int[cLen + 1];
-        h[cLen] = 0;
-        int max = 0;
-
-        for (int row = 0; row < rLen; ++row) {
-            Stack<Integer> s = new Stack<>();
-            for (int i = 0; i <= cLen; ++i) {
-                if (i < cLen) {
-                    if (matrix[row][i] == '1') {
-                        ++h[i];
-                    } else {
-                        h[i] = 0;
-                    }
-                }
-                if (s.isEmpty() || h[s.peek()] <= h[i]) {
-                    s.push(i);
-                } else {
-                    while (!s.isEmpty() && h[i] < h[s.peek()]) {
-                        int top = s.pop();
-                        int area = h[top] * (s.isEmpty() ? i : (i - 1 - s.peek()));
-                        if (area > max) {
-                            max = area;
-                        }
-                    }
-                    s.push(i);
-                }
+        int[] height = new int[matrix[0].length];
+        int res = 0;
+        for (int i = 0; i < matrix.length; ++i) {
+            for (int j = 0; j < matrix[0].length; ++j) {
+                height[j] = matrix[i][j] == '1' ? height[j] + 1 : 0;
             }
+            res = Math.max(res, maxArea(height));
         }
-        return max;
+        return res;
+    }
+
+    private int maxArea(int[] nums) {
+        Stack<Integer> stack = new Stack<>();
+        int res = 0;
+        for (int i = 0; i <= nums.length; ++i) {
+            int cur = i == nums.length ? 0 : nums[i];
+            while (!stack.isEmpty() && nums[stack.peek()] >= cur) {
+                int h = nums[stack.pop()];
+                int left = stack.isEmpty() ? -1 : stack.peek();
+                res = Math.max(res, h * (i - 1 - left));
+            }
+            stack.push(i);
+        }
+        return res;
     }
 }

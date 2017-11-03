@@ -1,31 +1,37 @@
 // O(n)
 class Solution {
     public String simplifyPath(String path) {
-        Deque<String> dq = new LinkedList<>();
+        Deque<String> stack = new ArrayDeque<>();
         int i = 0;
         while (i < path.length()) {
-            if (path.charAt(i) != '/') {
-                int j = i + 1;
-                while (j < path.length() && path.charAt(j) != '/') {
-                    ++j;
-                }
-                String s = path.substring(i, j);
-                if (s.equals("..")) {
-                    if (!dq.isEmpty()) {
-                        dq.pollLast();
-                    }
-                } else if (!s.equals(".")) {
-                    dq.offer(s);
-                }
-                i = j;
+            while (i < path.length() && path.charAt(i) == '/') {
+                ++i;
             }
-            ++i;
+            if (i >= path.length()) {
+                break;
+            }
+            int j = i + 1;
+            while (j < path.length() && path.charAt(j) != '/') {
+                ++j;
+            }
+            String s = path.substring(i, j);
+            if (s.equals("..")) {
+                if (!stack.isEmpty()) {
+                    stack.pop();
+                }
+            } else if (!s.equals(".")) {
+                stack.push(s);
+            }
+            i = j + 1;
         }
         StringBuilder sb = new StringBuilder();
-        while (!dq.isEmpty()) {
-            sb.append('/');
-            sb.append(dq.poll());
+        while (!stack.isEmpty()) {
+            sb.append("/");
+            sb.append(stack.pollLast());
         }
-        return sb.length() == 0 ? "/" : sb.toString();
+        if (sb.length() == 0) {
+            sb.append("/");
+        }
+        return sb.toString();
     }
 }

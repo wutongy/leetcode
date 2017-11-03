@@ -15,20 +15,24 @@
  *     public List<NestedInteger> getList();
  * }
  */
+// O(n)
 public class Solution {
+    private int res;
     public int depthSum(List<NestedInteger> nestedList) {
-        return depthSumHelper(nestedList, 1);
+        res = 0;
+        helper(nestedList);
+        return res;
     }
-
-    public int depthSumHelper(List<NestedInteger> nestedList, int depth) {
-        int result = 0;
-        for (NestedInteger nestedInteger: nestedList) {
-            if (nestedInteger.isInteger() == true) {
-                result += nestedInteger.getInteger() * depth;
+    private int helper(List<NestedInteger> nestedList) {
+        int sum = 0;
+        for (NestedInteger ni : nestedList) {
+            if (ni.isInteger()) {
+                sum += ni.getInteger();
             } else {
-                result += depthSumHelper(nestedInteger.getList(), depth + 1);
+                sum += helper(ni.getList());
             }
         }
-        return result;
+        res += sum;
+        return sum;
     }
 }

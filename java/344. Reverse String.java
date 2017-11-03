@@ -1,16 +1,11 @@
-public class Solution {
+// O(n)
+class Solution {
     public String reverseString(String s) {
-//         StringBuilder sb = new StringBuilder(s);
-//         return sb.reverse().toString();
-        char[] ca = s.toCharArray();
-        int begin = 0, end = s.length() - 1;
-        while (begin < end) {
-            char c = ca[begin];
-            ca[begin] = ca[end];
-            ca[end] = c;
-            begin++;
-            end--;
+        StringBuilder sb = new StringBuilder();
+        int j = s.length() - 1;
+        while (j >= 0) {
+            sb.append(s.charAt(j--));
         }
-        return new String(ca);
+        return sb.toString();
     }
 }

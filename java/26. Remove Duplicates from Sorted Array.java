@@ -1,20 +1,13 @@
 // O(n)
-public class Solution {
+class Solution {
     public int removeDuplicates(int[] nums) {
-        if (nums.length < 2) {
-            return nums.length;
-        }
-        int i = 0, j = 1;
+        int i = 0, j = 0;
         while (j < nums.length) {
-            while (j < nums.length && nums[j] == nums[i]) {
-                ++j;
+            if (j == 0 || (nums[j] != nums[j - 1])) {
+                nums[i++] = nums[j];
             }
-            if (j < nums.length) {
-                ++i;
-                nums[i] = nums[j];
-                ++j;
-            }
+            ++j;
         }
-        return i + 1;
+        return i;
     }
 }

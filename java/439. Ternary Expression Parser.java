@@ -1,25 +1,32 @@
-// O(n)
 class Solution {
     public String parseTernary(String expression) {
-        if (expression == null || expression.length() == 0) return "";
-        Deque<Character> stack = new LinkedList<>();
-
-        for (int i = expression.length() - 1; i >= 0; i--) {
-            char c = expression.charAt(i);
-            if (!stack.isEmpty() && stack.peek() == '?') {
-
-                stack.pop(); //pop '?'
-                char first = stack.pop();
-                stack.pop(); //pop ':'
-                char second = stack.pop();
-
-                if (c == 'T') stack.push(first);
-                else stack.push(second);
+        if (expression.length() == 0) {
+            return "";
+        }
+        Stack<String> stack = new Stack<>();
+        int i = expression.length() - 1, j = expression.length() - 1;
+        while (i >= 0) {
+            while (i >= 0 && expression.charAt(i) != ':' && expression.charAt(i) != '?') {
+                --i;
+            }
+            if (i != j) {
+                stack.push(expression.substring(i + 1, j + 1));
+            }
+            if (expression.charAt(i) == '?'){
+                if (expression.charAt(i - 1) == 'T') {
+                    String s1 = stack.pop();
+                    stack.pop();
+                    stack.push(s1);
+                } else {
+                    stack.pop();
+                }
+                i -= 2;
+                j = i;
             } else {
-                stack.push(c);
+                --i;
+                j = i;
             }
         }
-
-        return String.valueOf(stack.peek());
+        return stack.pop();
     }
 }

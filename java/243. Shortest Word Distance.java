@@ -1,19 +1,18 @@
 // O(n)
-public class Solution {
+class Solution {
     public int shortestDistance(String[] words, String word1, String word2) {
-        int indexWordOne = -1;
-        int indexWordTwo = -1;
-        int result = words.length;
-        for (int i = 0; i < words.length; i++) {
+        int res = words.length - 1;
+        int idx1 = -1, idx2 = -1;
+        for (int i = 0; i < words.length; ++i) {
             if (words[i].equals(word1)) {
-                indexWordOne = i;
+                idx1 = i;
             } else if (words[i].equals(word2)) {
-                indexWordTwo = i;
+                idx2 = i;
             }
-            if (indexWordOne != -1 && indexWordTwo != -1) {
-                result = Math.min(result, Math.abs(indexWordOne - indexWordTwo));
+            if (idx1 != -1 && idx2 != -1) {
+                res = Math.min(res, Math.abs(idx1 - idx2));
             }
         }
-        return result;
+        return res;
     }
 }

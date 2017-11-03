@@ -1,23 +1,38 @@
-// O(n) time, O(1) space;
+// O(n)
 class Solution {
     public String minWindow(String s, String t) {
-        int[] map = new int[256];
-        for (char c : t.toCharArray()) {
-            ++map[c];
+        HashMap<Character, Integer> map = new HashMap<>();
+        String res = "";
+        for (int i = 0; i < t.length(); ++i) {
+            Character c = t.charAt(i);
+            map.put(c, map.getOrDefault(c, 0) + 1);
         }
-        int counter = t.length(), begin = 0, end = 0, d = Integer.MAX_VALUE, head = 0;
-        while (end < s.length()) {
-            if (map[s.charAt(end++)]-- > 0) counter--;
-            while (counter == 0) {
-                if (end - begin < d) {
-                    d = end - begin;
-                    head = begin;
+        int i = 0, j = 0, count = t.length();
+        while (j < s.length()) {
+            if (map.containsKey(s.charAt(j))) {
+                if (map.get(s.charAt(j)) > 0) {
+                    --count;
                 }
-                if (map[s.charAt(begin++)]++ == 0) {
-                    ++counter;
+                map.put(s.charAt(j), map.get(s.charAt(j)) - 1);
+                if (count == 0) {
+                    while (i <= j) {
+                        if (map.containsKey(s.charAt(i))) {
+                            map.put(s.charAt(i), map.get(s.charAt(i)) + 1);
+                            if (map.get(s.charAt(i)) > 0) {
+                                ++count;
+                                break;
+                            }
+                        }
+                        ++i;
+                    }
+                    if (res.length() == 0 || j - i + 1 < res.length()) {
+                        res = s.substring(i, j + 1);
+                    }
+                    ++i;
                 }
             }
+            ++j;
         }
-        return d == Integer.MAX_VALUE ? "" : s.substring(head, head + d);
+        return res;
     }
 }

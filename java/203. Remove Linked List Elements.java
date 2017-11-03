@@ -9,17 +9,17 @@
 // O(n)
 class Solution {
     public ListNode removeElements(ListNode head, int val) {
-        if (head == null) {
-            return null;
+        while (head != null && head.val == val) {
+            head = head.next;
         }
-        ListNode pointer = head;
-        while (pointer.next != null) {
-            if (pointer.next.val == val) {
-                pointer.next = pointer.next.next;
+        ListNode cur = head;
+        while (cur != null && cur.next != null) {
+            if (cur.next.val == val) {
+                cur.next = cur.next.next;
             } else {
-                pointer = pointer.next;
+                cur = cur.next;
             }
         }
-        return head.val == val ? head.next : head;
+        return head;
     }
 }

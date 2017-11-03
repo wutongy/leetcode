@@ -10,16 +10,22 @@
 // O(n)
 class Solution {
     public boolean isValidBST(TreeNode root) {
-        return isValidBST(root, Long.MIN_VALUE, Long.MAX_VALUE);
-    }
-
-    private boolean isValidBST(TreeNode root, long minVal, long maxVal) {
-        if (root == null) {
-            return true;
+        TreeNode pre = null;
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode cur = root;
+        while (cur != null || !stack.isEmpty()) {
+            if (cur == null) {
+                cur = stack.pop();
+                if (pre != null && pre.val >= cur.val) {
+                    return false;
+                }
+                pre = cur;
+                cur = cur.right;
+            } else {
+                stack.push(cur);
+                cur = cur.left;
+            }
         }
-        if (root.val <= minVal || root.val >= maxVal) {
-            return false;
-        }
-        return isValidBST(root.left, minVal, root.val) && isValidBST(root.right, root.val, maxVal);
+        return true;
     }
 }

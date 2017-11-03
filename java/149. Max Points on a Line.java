@@ -9,45 +9,32 @@
  */
 // O(n^2)
 class Solution {
-    private int gcd(int a, int b) {
-        if (a == 0) {
-            return b;
-        }
-        return gcd(b % a, a);
-    }
     public int maxPoints(Point[] points) {
-        if (points.length <= 2) {
-            return points.length;
-        }
-        int result = 0;
+        int res = 0;
         for (int i = 0; i < points.length; ++i) {
-            Map<String, Integer> map = new HashMap<>();
-            int samex = 1;
-            int samey = 1;
-            int samep = 0;
-            for (int j = 0; j < points.length; ++j) {
-                if (j != i) {
-                    if ((points[j].x == points[i].x) && (points[j].y == points[i].y)) {
-                        samep++;
-                    }
-                    if (points[j].x == points[i].x) {
-                        samex++;
-                        continue;
-                    }
-                    if (points[j].y == points[i].y) {
-                        samey++;
-                        continue;
-                    }
-                    int numerator = points[j].y - points[i].y;
-                    int denominator = points[j].x - points[i].x;
-                    int gcd = gcd(numerator, denominator);
-                    String hashStr = (numerator / gcd) + " " + (denominator / gcd);
-                    map.put(hashStr, map.getOrDefault(hashStr, 1) + 1);
-                    result = Math.max(result, map.get(hashStr) + samep);
+            HashMap<String, Integer> map = new HashMap<>();
+            int sameP = 0, maxCount = 0;
+            for (int j = i + 1; j < points.length; ++j) {
+                int diffX = points[i].x - points[j].x;
+                int diffY = points[i].y - points[j].y;
+                if (diffX == 0 && diffY == 0) {
+                    ++sameP;
+                    continue;
                 }
+                int gcd = gcd(diffX, diffY);
+                String key = (diffY / gcd) + "_" + (diffX / gcd);
+                map.put(key, map.getOrDefault(key, 0) + 1);
+                maxCount = Math.max(maxCount, map.get(key));
             }
-            result = Math.max(result, Math.max(samex, samey));
+            res = Math.max(res, maxCount + sameP + 1);
         }
-        return result;
+        return res;
+    }
+
+    private int gcd(int x, int y) {
+        if (y == 0) {
+            return x;
+        }
+        return gcd(y, x % y);
     }
 }

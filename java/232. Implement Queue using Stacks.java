@@ -1,39 +1,40 @@
-// O(n)
-public class MyQueue {
-    private ArrayList<Integer> stackA, stackB;
+class MyQueue {
+    Stack<Integer> main;
+    Stack<Integer> backup;
     /** Initialize your data structure here. */
     public MyQueue() {
-        stackA = new ArrayList<Integer>();
-        stackB = new ArrayList<Integer>();
+        main = new Stack<>();
+        backup = new Stack<>();
     }
 
     /** Push element x to the back of queue. */
     public void push(int x) {
-        stackB.add(x);
+        backup.push(x);
     }
 
     /** Removes the element from in front of queue and returns that element. */
     public int pop() {
-        if (stackA.isEmpty()) {
-            int size = stackB.size();
-            while (size > 0) {
-                stackA.add(stackB.remove(size - 1));
-                --size;
+        if (main.isEmpty()) {
+            while (!backup.isEmpty()) {
+                main.push(backup.pop());
             }
         }
-        return stackA.remove(stackA.size() - 1);
+        return main.pop();
     }
 
     /** Get the front element. */
     public int peek() {
-        Integer front = this.pop();
-        stackA.add(front);
-        return front;
+        if (main.isEmpty()) {
+            while (!backup.isEmpty()) {
+                main.push(backup.pop());
+            }
+        }
+        return main.peek();
     }
 
     /** Returns whether the queue is empty. */
     public boolean empty() {
-        return stackA.isEmpty() && stackB.isEmpty();
+        return main.isEmpty() && backup.isEmpty();
     }
 }
 

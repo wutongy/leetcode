@@ -1,19 +1,40 @@
 // O(n^2)
-public class Solution {
+class Solution {
     public List<List<Integer>> generate(int numRows) {
-        ArrayList<List<Integer>> result = new ArrayList<List<Integer>>();
-        for (int i = 0; i < numRows; i++) {
-            ArrayList<Integer> newList = new ArrayList<>();
-            newList.add(1);
-            if (result.size() != 0) {
-                ArrayList<Integer> lastList = (ArrayList<Integer>)result.get(result.size() - 1);
-                for (int j = 1; j < lastList.size(); j++) {
-                    newList.add(lastList.get(j) + lastList.get(j - 1));
+        List<List<Integer>> res = new ArrayList<>();
+        for (int i = 1; i <= numRows; ++i) {
+            List<Integer> cur = new ArrayList<>();
+            cur.add(1);
+            if (i != 1) {
+                List<Integer> last = res.get(res.size() - 1);
+                for (int j = 1; j < last.size(); ++j) {
+                    cur.add(last.get(j) + last.get(j - 1));
                 }
-                newList.add(1);
+                cur.add(1);
             }
-            result.add(newList);
+            res.add(cur);
         }
-        return result;
+        return res;
+    }
+}
+
+class Solution {
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (numRows < 1) {
+            return res;
+        }
+        res.add(new ArrayList<>());
+        res.get(res.size() - 1).add(1);
+        for (int i = 2; i <= numRows; ++i) {
+            List<Integer> cur = new ArrayList<>();
+            cur.addAll(res.get(res.size() - 1));
+            cur.add(1);
+            for (int j = cur.size() - 2; j >= 1; --j) {
+                cur.set(j, cur.get(j) + cur.get(j - 1));
+            }
+            res.add(cur);
+        }
+        return res;
     }
 }

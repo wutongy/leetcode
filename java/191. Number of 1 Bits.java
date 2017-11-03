@@ -1,12 +1,12 @@
-// O(1)
+// O(number of ones)
 public class Solution {
     // you need to treat n as an unsigned value
     public int hammingWeight(int n) {
-        int count = 0, mask = 1;
+        int res = 0;
         while (n != 0) {
-            count += 1;
-            n = n & (n - 1);
+            n &= (n - 1);
+            ++res;
         }
-        return count;
+        return res;
     }
 }

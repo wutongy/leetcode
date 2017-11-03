@@ -28,3 +28,42 @@ class Solution {
         return result;
     }
 }
+
+class Solution {
+    public int calculate(String s) {
+        Stack<Integer> nums = new Stack<>();
+        Stack<Character> signs = new Stack<>();
+        int sum = 0;
+        Character sign = '+';
+        for (int i = 0; i < s.length(); ++i) {
+            if (s.charAt(i) == ' ') {
+                continue;
+            } else if (Character.isDigit(s.charAt(i))) {
+                int num = 0;
+                while (i < s.length() && Character.isDigit(s.charAt(i))) {
+                    num = num * 10 + (s.charAt(i) - '0');
+                    ++i;
+                }
+                sum = calc(sum, sign, num);
+                --i;
+            } else if (s.charAt(i) == '+' || s.charAt(i) == '-') {
+                sign = s.charAt(i);
+            } else if (s.charAt(i) == '(') {
+                nums.push(sum);
+                sum = 0;
+                signs.push(sign);
+                sign = '+';
+            } else if (s.charAt(i) == ')') {
+                sum = calc(nums.pop(), signs.pop(), sum);
+            }
+        }
+        return sum;
+    }
+
+    private int calc(int num1, Character op, int num2) {
+        if (op == '+') {
+            return num1 + num2;
+        }
+        return num1 - num2;
+    }
+}

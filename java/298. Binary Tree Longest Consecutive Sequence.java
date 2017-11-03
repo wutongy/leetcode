@@ -7,32 +7,31 @@
  *     TreeNode(int x) { val = x; }
  * }
  */
-
 // O(n)
 class Solution {
-    private int result;
+    private int res = 0;
     public int longestConsecutive(TreeNode root) {
-        result = 0;
-        dfs(root);
-        return result;
+        helper(root);
+        return res;
     }
-
-    private int dfs(TreeNode root) {
+    private int helper(TreeNode root) {
         if (root == null) {
             return 0;
         }
-        int leftLen = dfs(root.left);
-        int rightLen = dfs(root.right);
-        int res = 1;
-        if (root.left != null && root.val + 1 == root.left.val) {
-            ++leftLen;
-            res = Math.max(res, leftLen);
+        int len = 1;
+        if (root.left != null) {
+            int leftLen = helper(root.left);
+            if (root.val + 1 == root.left.val) {
+                len = Math.max(len, 1 + leftLen);
+            }
         }
-        if (root.right != null && root.val + 1 == root.right.val) {
-            ++rightLen;
-            res = Math.max(res, rightLen);
+        if (root.right != null) {
+            int rightLen = helper(root.right);
+            if (root.val + 1 == root.right.val) {
+                len = Math.max(len, 1 + rightLen);
+            }
         }
-        result = Math.max(result, res);
-        return res;
+        res = Math.max(res, len);
+        return len;
     }
 }

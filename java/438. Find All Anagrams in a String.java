@@ -1,27 +1,37 @@
-// O(n)
 class Solution {
     public List<Integer> findAnagrams(String s, String p) {
-        int[] chars = new int[26];
-        List<Integer> result = new ArrayList<>();
-        if (s == null || p == null || s.length() < p.length()) {
-            return result;
+        List<Integer> res = new ArrayList<>();
+        int[] map = new int[26];
+        Arrays.fill(map, -1);
+        for (int i = 0; i < p.length(); ++i) {
+            map[p.charAt(i) - 'a'] = Math.max(0, map[p.charAt(i) - 'a']) + 1;
         }
-        for (char c: p.toCharArray()) {
-            ++chars[c - 'a'];
+        int count = p.length();
+        int i = 0, j = 0;
+        while (j < s.length()) {
+            if (map[s.charAt(j) - 'a'] < 0) {
+                while (i < j) {
+                    count++;
+                    map[s.charAt(i) - 'a']++;
+                    ++i;
+                }
+                i = j + 1;
+            } else if (map[s.charAt(j) - 'a'] == 0) {
+                while (i < j && s.charAt(i) != s.charAt(j)) {
+                    map[s.charAt(i) - 'a']++;
+                    count++;
+                    ++i;
+                }
+                ++i;
+            } else {
+                --map[s.charAt(j) - 'a'];
+                --count;
+            }
+            if (j - i + 1 == p.length() && count == 0) {
+                    res.add(i);
+            }
+            ++j;
         }
-
-        int start = 0, end = 0, count = p.length();
-        while (end < s.length()) {
-            if (end - start == p.length() && chars[s.charAt(start++) - 'a']++ >= 0) {
-                count++;
-            }
-            if (--chars[s.charAt(end++) - 'a'] >= 0) {
-                count--;
-            }
-            if (count == 0) {
-                result.add(start);
-            }
-        }
-        return result;
+        return res;
     }
 }

@@ -1,30 +1,37 @@
 // O(n)
 class Solution {
     public int longestConsecutive(int[] nums) {
-        if (nums.length == 0) {
-            return 0;
+        HashSet<Integer> set = new HashSet<>(nums.length);
+        for (int num : nums) {
+            set.add(num);
         }
-        int res = 1;
-        HashSet<Integer> set = new HashSet<>();
-        for (int n : nums) {
-            set.add(n);
+        int max = 0;
+        for (int i : set) {
+            if (!set.contains(i - 1)) {
+                int j = i + 1;
+                while (set.contains(j)) {
+                    ++j;
+                }
+                max = Math.max(max, j - i);
+            }
         }
+        return max;
+    }
+}
+
+// HashMap O(n)
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        int res = 0;
+        HashMap<Integer, Integer> map = new HashMap<>();
         for (int n : nums) {
-            if (set.contains(n)) {
-                int len = 1;
-                int cur = n + 1;
-                while (set.contains(cur)) {
-                    ++len;
-                    set.remove(cur);
-                    ++cur;
-                }
-                cur = n - 1;
-                while (set.contains(cur)) {
-                    ++len;
-                    set.remove(cur);
-                    --cur;
-                }
-                res = Math.max(res, len);
+            if (!map.containsKey(n)) {
+                int left = map.getOrDefault(n - 1, 0);
+                int right = map.getOrDefault(n + 1, 0);
+                map.put(n, left + right + 1);
+                res = Math.max(res, map.get(n));
+                map.put(n - left, map.get(n));
+                map.put(n + right, map.get(n));
             }
         }
         return res;

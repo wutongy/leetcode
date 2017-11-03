@@ -1,33 +1,30 @@
 // O(n^2)
-public class Solution {
-    private int l, h;
-    private int result = 0;
-    int[] diff = {1, 0, -1, 0, 1};
+class Solution {
     public int islandPerimeter(int[][] grid) {
-        l = grid.length;
-        h = grid[0].length;
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[0].length; j++) {
+        int[] dirs = new int[]{-1, 0, 1, 0, -1};
+        for (int i = 0; i < grid.length; ++i) {
+            for (int j = 0; j < grid[0].length; ++j) {
                 if (grid[i][j] == 1) {
-                    result += calculatePerimeter(grid, i, j);
+                    return helper(grid, i, j, new boolean[grid.length][grid[0].length], dirs);
                 }
             }
         }
-        return result;
+        return 0;
     }
 
-    private int calculatePerimeter(int[][] grid, int x, int y) {
-        int accum = 0;
-        for (int i = 0; i < diff.length - 1; i++) {
-            int newX = x + diff[i];
-            int newY = y + diff[i + 1];
-            if (newX < 0 || newX >= l || newY < 0 || newY >= h) {
-                accum += 1;
-            } else if (grid[newX][newY] == 0) {
-                accum += 1;
+    private int helper(int[][] grid, int i, int j, boolean[][] visited, int[] dirs) {
+        visited[i][j] = true;
+        int res = 0;
+        for (int k = 0; k < 4; ++k) {
+            int ii = i + dirs[k];
+            int jj = j + dirs[k + 1];
+            if (ii < 0 || ii >= grid.length || jj < 0 || jj >= grid[0].length || grid[ii][jj] == 0) {
+                ++res;
+            } else if (!visited[ii][jj]) {
+                res += helper(grid, ii, jj, visited, dirs);
             }
         }
-        return accum;
+        return res;
     }
 }
 

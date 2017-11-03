@@ -1,3 +1,4 @@
+// O(n)
 /**
  * Definition for a binary tree node.
  * public class TreeNode {
@@ -7,15 +8,15 @@
  *     TreeNode(int x) { val = x; }
  * }
  */
-// O(n)
-public class Solution {
+class Solution {
     public TreeNode invertTree(TreeNode root) {
-        if (root == null) {
-            return root;
+        if (root != null) {
+            TreeNode temp = root.left;
+            root.left = root.right;
+            root.right = temp;
+            invertTree(root.left);
+            invertTree(root.right);
         }
-        TreeNode temp = invertTree(root.left);
-        root.left = invertTree(root.right);
-        root.right = temp;
         return root;
     }
 }

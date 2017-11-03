@@ -10,15 +10,25 @@
 // O(logn)
 class Solution {
     public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
-        TreeNode res = null;
-        while (root != null) {
-            if (root.val > p.val) {
-                res = root;
-                root = root.left;
-            } else {
+        if (root == null || p == null) {
+            return null;
+        }
+        TreeNode suc = null;
+        if (p.right != null) {
+            suc = p.right;
+            while (suc.left != null) {
+                suc = suc.left;
+            }
+            return suc;
+        }
+        while (root != null && root != p) {
+            if (root.val < p.val) {
                 root = root.right;
+            } else {
+                suc = root;
+                root = root.left;
             }
         }
-        return res;
+        return suc;
     }
 }

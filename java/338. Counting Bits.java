@@ -1,14 +1,10 @@
 // O(n) time, O(1) space
 class Solution {
     public int[] countBits(int num) {
-        int[] result = new int[num + 1];
+        int[] res = new int[num + 1];
         for (int i = 1; i <= num; ++i) {
-            if (i % 2 == 0) {
-                result[i] = result[i / 2];
-            } else {
-                result[i] = result[i - 1] + 1;
-            }
+            res[i] = res[i >>> 1] + (i & 1);
         }
-        return result;
+        return res;
     }
 }

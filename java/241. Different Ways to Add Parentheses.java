@@ -1,41 +1,43 @@
+// DP
 class Solution {
-    private Map<String, List<Integer>> map = new HashMap<>();
     public List<Integer> diffWaysToCompute(String input) {
+        HashMap<Integer, List<Integer>> map = new HashMap<>();
+        return helper(input, 0, input.length() - 1, map);
+    }
+
+    private List<Integer> helper(String s, int start, int end, HashMap<Integer, List<Integer>> map) {
+        if (map.containsKey(start * s.length() + end)) {
+            return map.get(start * s.length() + end);
+        }
         List<Integer> res = new ArrayList<>();
-        for (int i = 0; i < input.length(); ++i) {
-            if (input.charAt(i) == '-' || input.charAt(i) == '+' || input.charAt(i) == '*') {
-                String part1 = input.substring(0, i);
-                String part2 = input.substring(i + 1);
-                List<Integer> part1Res, part2Res;
-                if (map.containsKey(part1)) {
-                    part1Res = map.get(part1);
-                } else {
-                    part1Res = diffWaysToCompute(part1);
-                }
-                if (map.containsKey(part2)) {
-                    part2Res = map.get(part2);
-                } else {
-                    part2Res = diffWaysToCompute(part2);
-                }
-                for (Integer p1 : part1Res) {
-                    for (Integer p2 : part2Res) {
-                        Integer c = 0;
-                        if (input.charAt(i) == '+') {
-                            c = p1 + p2;
-                        } else if (input.charAt(i) == '-') {
-                            c = p1 - p2;
-                        } else {
-                            c = p1 * p2;
-                        }
-                        res.add(c);
+        boolean notNum = false;
+        int i = start;
+        while (i <= end) {
+            if (!Character.isDigit(s.charAt(i))) {
+                notNum = true;
+                List<Integer> left = helper(s, start, i - 1, map);
+                List<Integer> right = helper(s, i + 1, end, map);
+                for (Integer l : left) {
+                    for (Integer r : right) {
+                        res.add(calc(l, s.charAt(i), r));
                     }
                 }
             }
+            ++i;
         }
-        if (res.size() == 0) {
-            res.add(Integer.valueOf(input));
+        if (!notNum) {
+            res.add(Integer.valueOf(s.substring(start, end + 1)));
         }
-        map.put(input, res);
+        map.put(start * s.length() + end, res);
         return res;
+    }
+
+    private int calc(int left, Character c, int right) {
+        if (c == '+') {
+            return left + right;
+        } else if (c == '-') {
+            return left - right;
+        }
+        return left * right;
     }
 }

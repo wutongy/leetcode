@@ -1,5 +1,5 @@
-// O(log_5(n))
-public class Solution {
+// O(log5(n))
+class Solution {
     public int trailingZeroes(int n) {
         int r = 0;
         while (n > 0) {

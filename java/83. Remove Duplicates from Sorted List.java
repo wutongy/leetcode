@@ -6,23 +6,17 @@
  *     ListNode(int x) { val = x; }
  * }
  */
-
 // O(n)
-public class Solution {
+class Solution {
     public ListNode deleteDuplicates(ListNode head) {
-        if (head == null) {
-            return null;
-        }
         ListNode cur = head;
-        ListNode after = head.next;
-        while (after != null) {
-            if (after.val != cur.val) {
-                cur.next = after;
-                cur = after;
+        while (cur != null && cur.next != null) {
+            if (cur.val == cur.next.val) {
+                cur.next = cur.next.next;
+            } else {
+                cur = cur.next;
             }
-            after = after.next;
         }
-        cur.next = null;
         return head;
     }
 }

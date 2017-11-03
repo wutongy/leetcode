@@ -9,27 +9,30 @@
 // O(n)
 class Solution {
     public ListNode reverseBetween(ListNode head, int m, int n) {
-        if (head == null) {
+        if (m == n) {
             return head;
         }
-        ListNode fake_head = new ListNode(0);
-        fake_head.next = head;
-        ListNode pre = fake_head;
-        for (int i = 0; i < m - 1; ++i) {
-            pre = pre.next;
+        ListNode before = null, cur = head;
+        int i = 1;
+        while (i < m) {
+            before = cur;
+            cur = cur.next;
+            ++i;
         }
-        ListNode cur = pre.next;
-        ListNode prev = null;
-        for (int i = 0; i <= n - m; ++i) {
+        ListNode prev = cur, tail = cur;
+        cur = cur.next;
+        while (i < n) {
             ListNode next = cur.next;
             cur.next = prev;
             prev = cur;
             cur = next;
+            ++i;
         }
-        pre.next.next = cur;
-        pre.next = prev;
-        ListNode newHead = fake_head.next;
-        fake_head.next = null;
-        return newHead;
+        tail.next = cur;
+        if (before != null) {
+            before.next = prev;
+            return head;
+        }
+        return prev;
     }
 }

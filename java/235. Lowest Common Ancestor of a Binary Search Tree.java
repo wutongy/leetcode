@@ -7,15 +7,17 @@
  *     TreeNode(int x) { val = x; }
  * }
  */
-// O(logn) on average
 class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        if (p == root || q == root) {
-            return root;
+        while (root != null) {
+            if (root.val > p.val && root.val > q.val) {
+                root = root.left;
+            } else if (root.val < p.val && root.val < q.val) {
+                root = root.right;
+            } else {
+                return root;
+            }
         }
-        if ((p.val > root.val) ^ (q.val > root.val)) {
-            return root;
-        }
-        return p.val > root.val ? lowestCommonAncestor(root.right, p, q) : lowestCommonAncestor(root.left, p, q);
+        return root;
     }
 }

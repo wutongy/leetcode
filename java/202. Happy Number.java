@@ -1,23 +1,24 @@
-// O(n)
-public class Solution {
+
+class Solution {
     public boolean isHappy(int n) {
-        Set<Integer> hset = new HashSet<>();
-        int copy = n;
-        hset.add(copy);
-        while (copy != 1) {
-            int accum = 0;
-            while (copy > 0) {
-                int digit = copy % 10;
-                accum += digit * digit;
-                copy /= 10;
+        int slow = n, fast = n;
+        while (slow != 1) {
+            slow = helper(slow);
+            fast = helper(helper(fast));
+            if (slow == fast) {
+                break;
             }
-            if (hset.contains(accum)) {
-                return false;
-            } else {
-                hset.add(accum);
-            }
-            copy = accum;
         }
-        return true;
+        return slow == 1;
+    }
+
+    private int helper(int n) {
+        int res = 0;
+        while (n > 0) {
+            int temp = n % 10;
+            res += temp * temp;
+            n /= 10;
+        }
+        return res;
     }
 }

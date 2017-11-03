@@ -1,16 +1,18 @@
-// O(n * len(word)log(len(word)))
+// O(n)
 class Solution {
     public List<List<String>> groupAnagrams(String[] strs) {
+        List<List<String>> res = new ArrayList<>();
         HashMap<String, List<String>> map = new HashMap<>();
         for (String s : strs) {
             char[] cs = s.toCharArray();
             Arrays.sort(cs);
-            String ss = String.valueOf(cs);
-            map.putIfAbsent(ss, new ArrayList<>());
-            map.get(ss).add(s);
+            String key = new String(cs);
+            if (!map.containsKey(key)) {
+                res.add(new ArrayList<>());
+                map.put(key, res.get(res.size() - 1));
+            }
+            map.get(key).add(s);
         }
-        List<List<String>> res = new ArrayList<>();
-        res.addAll(map.values());
         return res;
     }
 }

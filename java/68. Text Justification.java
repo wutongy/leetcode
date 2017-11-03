@@ -1,44 +1,41 @@
 // O(n)
 class Solution {
-    public List<String> fullJustify(String[] words, int L) {
-        List<String> lines = new ArrayList<>();
-        int index = 0;
-        while (index < words.length) {
-            int count = words[index].length();
-            int last = index + 1;
-            while (last < words.length && (words[last].length() + count + 1 <= L)) {
-                count += 1 + words[last].length();
-                ++last;
-            }
-            StringBuilder sb = new StringBuilder();
-            sb.append(words[index]);
-            int diff = last - index - 1;
-            if (last == words.length || diff == 0) {
-                for (int i = index + 1; i < last; ++i) {
-                    sb.append(" ");
-                    sb.append(words[i]);
-                }
-                for (int i = sb.length(); i < L; ++i) {
-                    sb.append(" ");
-                }
+    public List<String> fullJustify(String[] words, int maxWidth) {
+        List<String> res = new ArrayList<>();
+        int i = 0, j = 0, width = 0;
+        while (j <= words.length) {
+            if (j == i) {
+                width = words[j].length();
+                ++j;
+            } else if (j < words.length && width + words[j].length() + (j - i) <= maxWidth) {
+                width += words[j].length();
+                ++j;
             } else {
-                int spaces = (L - count) / diff;
-                int r = (L - count) % diff;
-                for (int i = index + 1; i < last; ++i) {
-                    for (int k = spaces; k > 0; k--) {
-                        sb.append(" ");
+                int space = (j == words.length || j - i - 1 == 0) ? 1 : (maxWidth - width) / (j - i - 1);
+                int remain = (j == words.length) ? 0 : (maxWidth - width) - (j - i - 1) * space;
+                // System.out.println(j + " " + space + " " + remain);
+                StringBuilder sb = new StringBuilder();
+                while (i < j) {
+                    if (sb.length() != 0) {
+                        int numSpace = space + ((remain-- > 0) ? 1 : 0);
+                        for (int k = 0; k < numSpace; ++k) {
+                            sb.append(" ");
+                        }
                     }
-                    if (r > 0) {
-                        sb.append(" ");
-                        --r;
-                    }
-                    sb.append(" ");
                     sb.append(words[i]);
+                    ++i;
+                }
+                int len = maxWidth - sb.length();
+                for (int k = 0; k < len; ++k) {
+                    sb.append(" ");
+                }
+                res.add(sb.toString());
+                if (j == words.length) {
+                    break;
                 }
             }
-            lines.add(sb.toString());
-            index = last;
         }
-        return lines;
+
+        return res;
     }
 }

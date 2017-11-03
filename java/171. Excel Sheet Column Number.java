@@ -1,10 +1,10 @@
 // O(n)
-public class Solution {
+class Solution {
     public int titleToNumber(String s) {
-        int result = 0;
-        for (int i = 0; i < s.length(); i++) {
-            result = result * 26 + s.charAt(i) - 'A' + 1;
+        int res = 0;
+        for (int i = 0; i < s.length(); ++i) {
+            res = res * 26 + (s.charAt(i) - 'A') + 1;
         }
-        return result;
+        return res;
     }
 }

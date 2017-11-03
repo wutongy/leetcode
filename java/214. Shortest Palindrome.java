@@ -52,3 +52,29 @@ class Solution {
         return new StringBuilder(s.substring(end+1)).reverse().toString() + s;
     }
 }
+
+
+class Solution {
+    public String shortestPalindrome(String s) {
+        int len = s.length();
+        if (len < 2) {
+            return s;
+        }
+        int longest = 1;
+        for (int begin = 0; begin <= len / 2;) {
+            int start = begin, end = begin;
+            while (end + 1 < len && s.charAt(end + 1) == s.charAt(end)) {
+                ++end;
+            }
+            begin = end + 1;
+            while (end < len - 1 && start > 0 && s.charAt(end + 1) == s.charAt(start - 1)) {
+                ++end;
+                --start;
+            }
+            if (start == 0 && longest < end - start + 1) {
+                longest = end - start + 1;
+            }
+        }
+        return (new StringBuilder(s.substring(longest))).reverse().toString() + s;
+    }
+}

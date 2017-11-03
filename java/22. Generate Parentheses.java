@@ -1,24 +1,25 @@
+// O(2^n)
 class Solution {
     public List<String> generateParenthesis(int n) {
         List<String> res = new ArrayList<>();
-        helper(res, n, n, new StringBuilder());
+        backtrack(n, n, new StringBuilder(), res);
         return res;
     }
 
-    private void helper(List<String> res, int leftP, int rightP, StringBuilder sb) {
-        if (leftP == 0 && rightP == 0) {
+    private void backtrack(int start, int end, StringBuilder sb, List<String> res) {
+        if (start == 0 && end == 0) {
             res.add(sb.toString());
             return;
         }
-        if (leftP > 0) {
+        if (start > 0) {
             sb.append("(");
-            helper(res, leftP - 1, rightP, sb);
-            sb.deleteCharAt(sb.length() - 1);
+            backtrack(start - 1, end, sb, res);
+            sb.setLength(sb.length() - 1);
         }
-        if (rightP > leftP) {
+        if (end > start) {
             sb.append(")");
-            helper(res, leftP, rightP - 1, sb);
-            sb.deleteCharAt(sb.length() - 1);
+            backtrack(start, end - 1, sb, res);
+            sb.setLength(sb.length() - 1);
         }
     }
 }

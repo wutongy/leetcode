@@ -13,6 +13,7 @@ class Solution {
                 len = 1;
             }
         }
+
         return Math.max(res, len);
     }
 }

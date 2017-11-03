@@ -1,39 +1,25 @@
-// O(n) stack
+// O(n)
 class Solution {
     public int longestValidParentheses(String s) {
         Stack<Integer> stack = new Stack<>();
-        int maxL = 0;
+        int max = 0;
         int left = -1;
-        for (int i = 0; i < s.length(); ++i) {
-            if (s.charAt(i) == '(') {
-                stack.push(i);
+        for (int j = 0; j < s.length(); ++j) {
+            if (s.charAt(j) == '(') {
+                stack.push(j);
             } else {
                 if (stack.isEmpty()) {
-                    left = i;
+                    left = j;
                 } else {
                     stack.pop();
-                    maxL = Math.max(maxL, stack.isEmpty() ? i - left : i - stack.peek());
+                    if (stack.isEmpty()) {
+                        max = Math.max(max, j - left);
+                    } else {
+                        max = Math.max(max, j - stack.peek());
+                    }
                 }
             }
         }
-        return maxL;
-    }
-}
-
-// dp O(n)
-class Solution {
-    public int longestValidParentheses(String s) {
-        if (s.length() <= 1) {
-            return 0;
-        }
-        int curMax = 0;
-        int[] longest = new int[s.length()];
-        for (int i = 1; i < s.length(); ++i) {
-            if (s.charAt(i) == ')' && i - longest[i - 1] - 1 >= 0 && s.charAt(i - longest[i - 1] - 1) == '(') {
-                longest[i] = longest[i - 1] + 2 + ((i - longest[i - 1] - 2 >= 0) ? longest[i - longest[i - 1] - 2] : 0);
-                curMax = Math.max(longest[i], curMax);
-            }
-        }
-        return curMax;
+        return max;
     }
 }

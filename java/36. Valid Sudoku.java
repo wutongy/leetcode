@@ -28,3 +28,23 @@ class Solution {
         return true;
     }
 }
+
+class Solution {
+    public boolean isValidSudoku(char[][] board) {
+        int[] bitset = new int[27];
+        for (int i = 0; i < board.length; ++i) {
+            for (int j = 0; j < board[0].length; ++j) {
+                if (board[i][j] != '.') {
+                    int n = Integer.valueOf(board[i][j]);
+                    if ((bitset[i] & (1 << n)) != 0 || (bitset[9 + j] & (1 << n)) != 0 || (bitset[18 + (i / 3) * 3 + (j / 3)] & (1 << n)) != 0) {
+                        return false;
+                    }
+                    bitset[i] |= 1 << n;
+                    bitset[9 + j] |= 1 << n;
+                    bitset[18 + (i / 3) * 3 + (j / 3)] |= 1 << n;
+                }
+            }
+        }
+        return true;
+    }
+}

@@ -1,4 +1,4 @@
-// O(n) time, O(1) space
+// O(n)
 class Solution {
     public void rotate(int[] nums, int k) {
         k %= nums.length;
@@ -12,8 +12,8 @@ class Solution {
             int temp = nums[start];
             nums[start] = nums[end];
             nums[end] = temp;
-            ++start;
-            --end;
+            start++;
+            end--;
         }
     }
 }

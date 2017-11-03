@@ -16,7 +16,7 @@ class Solution {
             }
             res.add(sb.toString());
             i = j;
-            sb = new StringBuilder();
+            sb.setLength(0);
         }
         return res;
     }

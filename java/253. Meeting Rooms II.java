@@ -10,23 +10,27 @@
 // O(nlogn)
 class Solution {
     public int minMeetingRooms(Interval[] intervals) {
-        int[] starts = new int[intervals.length];
-        int[] ends = new int[intervals.length];
+        Arrays.sort(intervals, new Comparator<Interval>() {
+            public int compare(Interval a, Interval b) {
+                if (a.start == b.start) {
+                    return a.end - b.end;
+                }
+                return a.start - b.start;
+            }
+        });
+        PriorityQueue<Interval> pq = new PriorityQueue<>(1, new Comparator<Interval>() {
+            public int compare(Interval a, Interval b) {
+                return a.end - b.end;
+            }
+        });
         for (int i = 0; i < intervals.length; ++i) {
-            starts[i] = intervals[i].start;
-            ends[i] = intervals[i].end;
-        }
-        Arrays.sort(starts);
-        Arrays.sort(ends);
-        int rooms = 0;
-        int endsItr = 0;
-        for (int i = 0; i < starts.length; ++i) {
-            if (starts[i] < ends[endsItr]) {
-                ++rooms;
+            if (pq.isEmpty() || pq.peek().end > intervals[i].start) {
+                pq.offer(intervals[i]);
             } else {
-                ++endsItr;
+                pq.poll();
+                pq.offer(intervals[i]);
             }
         }
-        return rooms;
+        return pq.size();
     }
 }

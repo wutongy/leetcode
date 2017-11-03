@@ -9,38 +9,34 @@
  */
 // O(n)
 class Solution {
-    private class Node {
-        TreeNode node;
-        int idx;
-        Node(TreeNode node, int idx) {
-            this.node = node;
-            this.idx = idx;
-        }
-    }
     public List<List<Integer>> verticalOrder(TreeNode root) {
         if (root == null) {
-            return new ArrayList<>();
+            return new ArrayList<List<Integer>>();
         }
-        int minIdx = 0, maxIdx = 0;
-        Queue<Node> queue = new LinkedList<>();
-        queue.offer(new Node(root, 0));
-        HashMap<Integer, List<Integer>> map = new HashMap<>();
-        while (!queue.isEmpty()) {
-            Node n = queue.poll();
-            map.putIfAbsent(n.idx, new ArrayList<>());
-            map.get(n.idx).add(n.node.val);
-            minIdx = Math.min(minIdx, n.idx);
-            maxIdx = Math.max(maxIdx, n.idx);
-            if (n.node.left != null) {
-                queue.offer(new Node(n.node.left, n.idx - 1));
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        Queue<TreeNode> nodes = new LinkedList<>();
+        Queue<Integer> depth = new LinkedList<>();
+        nodes.offer(root);
+        depth.offer(0);
+        int min = 0;
+        while (!nodes.isEmpty()) {
+            TreeNode cur = nodes.poll();
+            int curDepth = depth.poll();
+            min = Math.min(min, curDepth);
+            map.putIfAbsent(curDepth, new ArrayList<>());
+            map.get(curDepth).add(cur.val);
+            if (cur.left != null) {
+                nodes.offer(cur.left);
+                depth.offer(curDepth - 1);
             }
-            if (n.node.right != null) {
-                queue.offer(new Node(n.node.right, n.idx +1));
+            if (cur.right != null) {
+                nodes.offer(cur.right);
+                depth.offer(curDepth + 1);
             }
         }
-        List<List<Integer>> res = new ArrayList<>(maxIdx - minIdx + 1);
-        for (int i = minIdx; i <= maxIdx; ++i) {
-            res.add(map.get(i));
+        List<List<Integer>> res = new ArrayList<>(map.size());
+        for (int i = 0; i < map.size(); ++i) {
+            res.add(map.get(min + i));
         }
         return res;
     }
